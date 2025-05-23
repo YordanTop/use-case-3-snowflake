@@ -1,0 +1,64 @@
+// Създаване на базата данни
+CREATE DATABASE TOUCAN_ORDER_REVIEW_DATABASE;
+
+// Създаване на файлов формат за json
+CREATE OR REPLACE FILE FORMAT main_json_format
+    TYPE = JSON
+    strip_outer_array = true;
+
+// Създаване на хранилище за нашите: потребители, поръчки
+CREATE OR REPLACE STAGE TOUCAN_ORDER_REVIEW_DATABASE.PUBLIC.CUSTOMER_INFO
+    FILE_FORMAT = main_json_format,
+    COMMENT = 'This source specify the customers info in json format';
+
+CREATE OR REPLACE STAGE TOUCAN_ORDER_REVIEW_DATABASE.PUBLIC.ORDER_INFO
+    FILE_FORMAT = main_json_format,
+    COMMENT = 'This source specify the orders info in json format';
+
+// Създаване на holder таблиците: raw_customers_json_holder, raw_order_json_holder
+CREATE OR REPLACE TEMP TABLE raw_customers_json_holder
+(
+    json_holder VARIANT
+);
+
+COPY INTO  raw_customers_json_holder
+FROM @TOUCAN_ORDER_REVIEW_DATABASE.PUBLIC.CUSTOMER_INFO/customers_data.json;
+
+CREATE OR REPLACE TEMP TABLE raw_orders_json_holder
+(
+    json_holder VARIANT
+);
+
+COPY INTO  raw_orders_json_holder
+FROM @TOUCAN_ORDER_REVIEW_DATABASE.PUBLIC.CUSTOMER_INFO/orders_data.json;
+
+// Създаване на таблиците: raw_customers_json, raw_order_json
+
+CREATE TABLE raw_customers_json
+AS
+SELECT 
+        json_holder['customer_id'] AS id,
+        json_holder['name'] AS name,
+        json_holder['email'] AS email,
+        json_holder['registration_date'] AS registration_date,
+        json_holder['address']['street'] AS street,
+        json_holder['address']['city'] AS city,
+        json_holder['address']['zip_code'] AS zip_code,
+        json_holder['loyalty_points'] AS loyalty_points
+FROM raw_customers_json_holder;
+
+
+CREATE TABLE raw_orders_json
+AS
+SELECT 
+    json_holder['order_id'] AS id,
+    json_holder['customer_id'] AS customer_id,
+    json_holder['order_date'] AS order_date,
+    json_holder['total_amount'] AS total_amount,
+    json_holder['customer_id'] AS customer_id,
+    json_holder['customer_id'] AS customer_id,
+    json_holder['shipping_method'] AS shipping_method,
+FROM raw_order_json_holder of 
+
+
+

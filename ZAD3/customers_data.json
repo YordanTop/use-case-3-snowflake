@@ -1,0 +1,26 @@
+[
+  {
+    "customer_id": "CUST001",
+    "name": "Alice Wonderland",
+    "email": "alice@example.com",
+    "registration_date": "2023-01-15",
+    "address": {
+      "street": "123 Rabbit Hole",
+      "city": "Fantasy Land",
+      "zip_code": "12345"
+    },
+    "loyalty_points": 1500
+  },
+  {
+    "customer_id": "CUST002",
+    "name": "Bob The Builder",
+    "email": "bob@example.com",
+    "registration_date": "2023-02-20",
+    "address": {
+      "street": "456 Tool Ave",
+      "city": "Construction City",
+      "zip_code": "67890"
+    },
+    "loyalty_points": 800
+  }
+]
